@@ -15,12 +15,14 @@ type Props = {
     data: table_row[]
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://real-time-portfolio-dashboard-be.onrender.com'
+
 
 export default function PortfolioTable({data}: Props) {
     
     const [cmpData, setCmpData] = useState<Record<string, number>>({})
     const [fundamentalData, setFundamentalData] = 
-        useState<Record<string, {peRatio: number | null; lastestEarning: number | null}>>({})
+        useState<Record<string, {peRatio: number | null; lastestEarnings: number | null}>>({})
     const [cmpLoading, setCmpLoading] = useState(false)
     const [fundamentalLoading, setFundamentalLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -38,12 +40,7 @@ export default function PortfolioTable({data}: Props) {
             try {
                 const symbols = data.map(d => d.exchange_code).join(',')
 
-                const response = await axios.get(
-                    'http://localhost:5001/api/cmp',
-                    {
-                        params: { symbols }
-                    }
-                )
+                const response = await axios.get(`${BASE_URL}/api/cmp`, { params: { symbols } })
 
                 const result = response?.data
                 setCmpData(result)
@@ -96,7 +93,7 @@ export default function PortfolioTable({data}: Props) {
 
                         try {
                             const res = await axios.get(
-                                'http://localhost:5001/api/fundamentals',
+                                `${BASE_URL}/api/fundamentals`,
                                 {
                                     params: {
                                         symbol: code,
@@ -262,7 +259,7 @@ export default function PortfolioTable({data}: Props) {
                 header: 'Latest Earnings',
                 cell: ({ row }) => {
                   const code = row.original.exchange_code
-                  const earning = fundamentalData[code]?.lastestEarning
+                  const earning = fundamentalData[code]?.lastestEarnings
                   return earning !== null && earning !== undefined
                     ? earning.toFixed(2)
                     : 'N/A'
@@ -376,7 +373,7 @@ export default function PortfolioTable({data}: Props) {
                                                 {fundamentalData[stock.exchange_code]?.peRatio ?? 'N/A'}
                                             </td>
                                             <td className="border p-1">
-                                                {fundamentalData[stock.exchange_code]?.lastestEarning ?? 'N/A'}
+                                                {fundamentalData[stock.exchange_code]?.lastestEarnings ?? 'N/A'}
                                             </td>
                                             <td className='border p-1 '>{stock.exchange}</td>
                                             <td className='border p-1 '>{stock.exchange_code}</td>
