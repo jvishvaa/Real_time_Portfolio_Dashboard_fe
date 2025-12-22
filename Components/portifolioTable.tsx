@@ -262,7 +262,7 @@ export default function PortfolioTable({data}: Props) {
                 header: 'Latest Earnings',
                 cell: ({ row }) => {
                   const code = row.original.exchange_code
-                  const earning = fundamentalData[code]?.lastestEarnings
+                  const earning = fundamentalData[code]?.lastestEarning
                   return earning !== null && earning !== undefined
                     ? earning.toFixed(2)
                     : 'N/A'
@@ -376,7 +376,7 @@ export default function PortfolioTable({data}: Props) {
                                                 {fundamentalData[stock.exchange_code]?.peRatio ?? 'N/A'}
                                             </td>
                                             <td className="border p-1">
-                                                {fundamentalData[stock.exchange_code]?.lastestEarnings ?? 'N/A'}
+                                                {fundamentalData[stock.exchange_code]?.lastestEarning ?? 'N/A'}
                                             </td>
                                             <td className='border p-1 '>{stock.exchange}</td>
                                             <td className='border p-1 '>{stock.exchange_code}</td>
