@@ -7,7 +7,7 @@ export type table_row = {
     sector: string
 }
 
-export const mock_cmp_date: mock_data<string, number> = {
+export const mock_cmp_date: Record<string, number> = {
     'HDFCBANK': 600,
     'BAJFINANCE': 7200,
     '532174': 1120,
